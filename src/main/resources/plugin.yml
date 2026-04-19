@@ -1,0 +1,4 @@
+name: CommandBlocker
+version: 1.0
+main: me.yourname.commandblocker.CommandBlocker
+api-version: 1.21
