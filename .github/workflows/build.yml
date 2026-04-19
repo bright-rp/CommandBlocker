@@ -16,12 +16,14 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: maven
 
-      # 🔥 ЖЁСТКАЯ ОЧИСТКА КЭША
-      - name: Kill Maven cache
-        run: rm -rf ~/.m2
+      # 🔥 ПОЛНОЕ УДАЛЕНИЕ БИТЫХ ЗАВИСИМОСТЕЙ
+      - name: Clean Maven cache
+        run: |
+          rm -rf ~/.m2
+          rm -rf ~/.m2/repository/net/kyori
 
+      # 🔥 СИЛЬНОЕ ПЕРЕСКАЧИВАНИЕ ВСЕГО
       - name: Build with Maven
         run: mvn -U -B clean package
 
