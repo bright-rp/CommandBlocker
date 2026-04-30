@@ -1,0 +1,43 @@
+package com.zetx.visual.features;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import com.zetx.visual.config.ZetXConfig;
+
+public class ZetXHUD {
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
+
+    public static void renderHotbar(DrawContext context) {
+        if (mc.player == null) return;
+        
+        int x = mc.getWindow().getScaledWidth() / 2 - 91;
+        int y = mc.getWindow().getScaledHeight() - 24;
+
+        drawRoundedGradientRect(context, x, y, 182, 22, 0xFFFF8C42, 0xFFFF4D8D);
+
+        int selectedSlot = mc.player.getInventory().selectedSlot;
+        drawSelectionFrame(context, x + (selectedSlot * 20) + 1, y + 1, 20, 0xFFA020F0, 0xFFFF0000);
+
+        for (int i = 0; i < 9; i++) {
+            int itemX = x + (i * 20) + 3;
+            int itemY = y + 3;
+            // ПРАВИЛЬНЫЕ МЕТОДЫ ДЛЯ 1.21.4:
+            context.drawItem(mc.player.getInventory().getStack(i), itemX, itemY);
+            context.drawStackOverlay(mc.textRenderer, mc.player.getInventory().getStack(i), itemX, itemY);
+        }
+    }
+
+    // ЭТИ МЕТОДЫ ДОЛЖНЫ БЫТЬ ТУТ, ЧТОБЫ НЕ БЫЛО ОШИБКИ "Symbol not found"
+    private static void drawSelectionFrame(DrawContext context, int x, int y, int size, int colorTop, int colorBottom) {
+        context.fill(x, y, x + size, y + 1, colorTop);
+        context.fill(x, y + size - 1, x + size, y + size, colorBottom);
+        context.fill(x, y, x + 1, y + size, colorTop);
+        context.fill(x + size - 1, y, x + size, y + size, colorBottom);
+    }
+
+    private static void drawRoundedGradientRect(DrawContext context, int x, int y, int w, int h, int c1, int c2) {
+        context.fill(x + 1, y, x + w - 1, y + h, 0x90000000);
+        context.fill(x + 1, y, x + w - 1, y + 1, c1);
+        context.fill(x + 1, y + h - 1, x + w - 1, y + h, c2);
+    }
+}
